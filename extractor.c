@@ -200,7 +200,7 @@ int getBMPFromJXR(uint8_t *input_data, long file_size,
 }
 
 BOOL IsSupportedEx(char *filename, char *data) {
-	const char header[] = {0x89, 'P', 'N', 'G'};
+	const char header[] = {0x49, 0x49, 0xbc, 0x01};
 	for (int i = 0; i < sizeof(header); i++) {
 		if (header[i] == 0x00)
 			continue;
