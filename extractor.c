@@ -23,7 +23,7 @@ const char *plugin_info[4] = {
 const int header_size = 64;
 
 typedef struct {
-	uint8_t *buf;
+	const uint8_t *buf;
 	size_t size;
 	size_t cur;
 } data_pointer;
@@ -68,7 +68,7 @@ static uint32_t GetStride(const uint32_t width, const uint32_t bitCount) {
 		return -1;                                                             \
 	}
 
-int getBMPFromJXR(uint8_t *input_data, long file_size,
+int getBMPFromJXR(const uint8_t *input_data, size_t file_size,
                   BITMAPFILEHEADER *bitmap_file_header,
                   BITMAPINFOHEADER *bitmap_info_header, uint8_t **data) {
 
@@ -199,7 +199,7 @@ int getBMPFromJXR(uint8_t *input_data, long file_size,
 	return 0;
 }
 
-BOOL IsSupportedEx(char *filename, char *data) {
+BOOL IsSupportedEx(const char *data) {
 	const char header[] = {0x49, 0x49, 0xbc, 0x01};
 	for (int i = 0; i < sizeof(header); i++) {
 		if (header[i] == 0x00)
@@ -210,8 +210,8 @@ BOOL IsSupportedEx(char *filename, char *data) {
 	return TRUE;
 }
 
-int GetPictureInfoEx(long data_size, char *data,
-                     struct PictureInfo *picture_info) {
+int GetPictureInfoEx(size_t data_size, const char *data,
+                     SusiePictureInfo *picture_info) {
 	data_pointer d;
 	d.buf = (uint8_t *)data;
 	d.size = data_size;
@@ -281,8 +281,8 @@ int GetPictureInfoEx(long data_size, char *data,
 	return SPI_ALL_RIGHT;
 }
 
-int GetPictureEx(long data_size, HANDLE *bitmap_info, HANDLE *bitmap_data,
-                 SPI_PROGRESS progress_callback, long user_data, char *data) {
+int GetPictureEx(size_t data_size, HANDLE *bitmap_info, HANDLE *bitmap_data,
+                 SPI_PROGRESS progress_callback, intptr_t user_data, const char *data) {
 	uint8_t *data_u8;
 	BITMAPINFOHEADER bitmap_info_header;
 	BITMAPFILEHEADER bitmap_file_header;
@@ -293,7 +293,7 @@ int GetPictureEx(long data_size, HANDLE *bitmap_info, HANDLE *bitmap_data,
 		if (progress_callback(1, 1, user_data))
 			return SPI_ABORT;
 
-	if (!getBMPFromJXR((uint8_t *)data, data_size, &bitmap_file_header,
+	if (!getBMPFromJXR((const uint8_t *)data, data_size, &bitmap_file_header,
 	                   &bitmap_info_header, &data_u8))
 		return SPI_MEMORY_ERROR;
 	*bitmap_info = LocalAlloc(LMEM_MOVEABLE, sizeof(BITMAPINFOHEADER));
