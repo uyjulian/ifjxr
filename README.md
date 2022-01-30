@@ -2,6 +2,11 @@
 
 This plugin allows reading of JXR images in Susie plugin-compatible image viewers.
 
+## Downloads
+
+The following binaries are available:  
+* [Win32 (Intel 32-bit)](https://github.com/uyjulian/ifjxr/releases/latest/download/ifjxr.7z)  
+
 ## Building
 
 After cloning submodules, a simple `make` will generate `ifjxr.spi`.
